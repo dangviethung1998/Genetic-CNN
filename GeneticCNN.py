@@ -6,8 +6,11 @@ from deap import base, creator, tools, algorithms
 from scipy.stats import bernoulli
 from dag import DAG, DAGValidationError
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+print(tf.__version__)
 from tensorflow.examples.tutorials.mnist import input_data
+from tensorflow.python.framework import ops
 
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
@@ -118,7 +121,7 @@ def generate_dag(optimal_indvidual, stage_name, num_nodes):
 def generate_tensorflow_graph(individual, stages, num_nodes, bits_indices):
     activation_function_pattern = "/Relu:0"
 
-    tf.reset_default_graph()
+    ops.reset_default_graph()
     X = tf.placeholder(tf.float32, shape=[None, 28, 28, 1], name="X")
     Y = tf.placeholder(tf.float32, [None, 10], name="Y")
 
